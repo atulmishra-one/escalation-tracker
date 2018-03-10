@@ -25,7 +25,7 @@ SECRET_KEY = 'mmtkd#80^nd$&zr_^)ct6yqg12-i89&8w0q!sm&xz)_9v*@0yv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['escalation.herokuapp.com', 'localhost']
 
 AUTH_USER_MODEL = 'accounts.MyUser'
 

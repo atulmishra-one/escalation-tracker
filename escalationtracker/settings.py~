@@ -25,7 +25,7 @@ SECRET_KEY = 'mmtkd#80^nd$&zr_^)ct6yqg12-i89&8w0q!sm&xz)_9v*@0yv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['escalation.herokuapp.com']
+ALLOWED_HOSTS = ['escalation.herokuapp.com', 'localhost']
 
 AUTH_USER_MODEL = 'accounts.MyUser'
 
@@ -123,7 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'), )
 
 STATIC_URL = '/static/'
 

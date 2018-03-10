@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Profile</title>
+    <title>New Ticket</title>
 
     {% load bootstrap4 %}
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
-
-    <!-- Custom styles for this template -->
-    <link href="dashboard.css" rel="stylesheet">
 </head>
 
 <body>
@@ -52,49 +49,17 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group mr-2">
-                        <a href="/tickets/new/" class="btn btn-primary">Start Ticket</a>
-                    </div>
-                    <form class="form-inline" method="post" action="">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="from_date" class="sr-only">From</label>
-                            <input type="date" class="form-control-plaintext"
-                                   id="from_date">
-                        </div>
-                        <div class="form-group mx-sm-3">
-                            <label for="to_date" class="sr-only">To</label>
-                            <input type="date" class="form-control-plaintext"
-                                   id="to_date">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <span data-feather="search"></span></button>
-                    </form>
-                </div>
+                <h1 class="h2">Start Ticket</h1>
             </div>
-            <h2>Tickets</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Submitted</th>
-                        <th>Pending</th>
-                        <th>Closed</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>#</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            {% bootstrap_messages %}
+            <form method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-danger" href="/accounts/profile">Cancel</a>
+    {% endbuttons %}
+</form>
         </main>
     </div>
 </div>

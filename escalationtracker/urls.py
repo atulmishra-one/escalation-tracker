@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from accounts import views
 from django.conf.urls.static import static
 from django.conf import settings
-from tickets.views import new_ticket, ticket_list
+from tickets.views import new_ticket, ticket_list, edit_ticket, delete_ticket
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +28,7 @@ urlpatterns = [
     path('accounts/profile/', views.profile),
     path('signup/', views.signup),
     path('tickets/new/', new_ticket),
-    path('tickets/list/', ticket_list)
+    path('tickets/list/', ticket_list),
+    path('tickets/edit/<int:id>/', edit_ticket),
+    path('tickets/delete/', delete_ticket),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

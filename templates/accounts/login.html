@@ -6,21 +6,32 @@
     {% load bootstrap4 %}
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
+    <style>
+        .form-signin {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-        {% bootstrap_messages %}
-            <form method="post" class="form">
+
+{% bootstrap_messages %}
+<form method="post" class="form form-signin">
+    <div class="text-center mb-4">
+        <img class="mb-4"
+             src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Escalation Tracker</h1>
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
         <button type="submit" class="btn btn-primary">Login</button>
     {% endbuttons %}
-</form>
-        </div>
+        <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018. <a href="/signup">Sign up</a></p>
     </div>
-</div>
+</form>
 </body>
 </html>

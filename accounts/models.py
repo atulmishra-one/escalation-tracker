@@ -54,6 +54,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         ),
     )
 
+    is_manager = models.BooleanField(
+        _('Manager status'),
+        default=False
+    )
+
     emp_code = models.CharField(max_length=50, blank=True, null=True)
 
     image = models.ImageField(blank=True)

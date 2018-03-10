@@ -1,12 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import UserCreateForm
+from tickets.models import Ticket
 
 # Create your views here.
 
 
 def profile(request):
-    return render(request, 'accounts/profile.html')
+
+    submitted = Ticket.objects.filter(form_user=request.user.id, status=3).all()
+    pending = Ticket.objects.filter(escalate_to=request.user.id, status=1).all()
+    closed = Ticket.objects.filter(escalate_to=request.user.id, status=2).all()
+
+    if request.user.is_manager:
+        pending = Ticket.objects.filter(escalate_to=request.user.id, status=3).all()
+        closed = Ticket.objects.filter(form_user=request.user.id, status=2).all()
+    counts = {
+        'submitted': len(submitted),
+        'pending': len(pending),
+        'closed': len(closed)
+    }
+    return render(request, 'accounts/profile.html', {'counts': counts})
 
 
 def signup(request):

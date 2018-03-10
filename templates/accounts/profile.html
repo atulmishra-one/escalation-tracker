@@ -31,7 +31,9 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
+                        {% if user.image %}
                         <img src=" {{user.image.url}}" class="img-fluid img-thumbnail">
+                        {% endif %}
                     </li>
                     <li class="nav-item">
                         <strong class="text text-success">
@@ -57,17 +59,17 @@
                     <div class="btn-group mr-2">
                         <a href="/tickets/new/" class="btn btn-primary">Start Ticket</a>
                     </div>
-                    <form class="form-inline" method="post" action="">
-                        {% csrf_token %}
+                    <form class="form-inline" method="get" action="">
+
                         <div class="form-group">
                             <label for="from_date" class="sr-only">From</label>
                             <input type="date" class="form-control-plaintext"
-                                   id="from_date">
+                                   id="from_date" name="from_date">
                         </div>
                         <div class="form-group mx-sm-3">
                             <label for="to_date" class="sr-only">To</label>
                             <input type="date" class="form-control-plaintext"
-                                   id="to_date">
+                                   id="to_date" name="to_date">
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm">
                             <span data-feather="search"></span></button>
@@ -88,9 +90,9 @@
                     <tbody>
                     <tr>
                         <td>#</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td><a href="/tickets/list/?filter=3">{{counts.submitted}}</a></td>
+                        <td><a href="/tickets/list/?filter=1">{{counts.pending}}</a></td>
+                        <td><a href="/tickets/list/?filter=2">{{counts.closed}}</a></td>
                     </tr>
                     </tbody>
                 </table>

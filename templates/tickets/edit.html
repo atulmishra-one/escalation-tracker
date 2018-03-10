@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>New Ticket</title>
+    <title>Edit Ticket</title>
 
     {% load bootstrap4 %}
     {% bootstrap_css %}
@@ -51,17 +51,17 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Start Ticket</h1>
+                <h1 class="h2">View/Edit Ticket</h1>
             </div>
             {% bootstrap_messages %}
-            <form method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-danger" href="/accounts/profile">Cancel</a>
-    {% endbuttons %}
-</form>
+            <form method="post" class="form" id="edit">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a class="btn btn-danger" href="/accounts/profile">Cancel</a>
+                {% endbuttons %}
+            </form>
         </main>
     </div>
 </div>
@@ -69,8 +69,16 @@
 <!-- Icons -->
 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 <script>
-      feather.replace()
-
+      feather.replace();
+      $('#edit').submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                data: $('#edit').serialize()
+            }).done(function(response){
+                window.close();
+            });
+      });
 </script>
 </body>
 </html>

@@ -15,12 +15,32 @@ def profile(request):
     if request.user.is_manager:
         pending = Ticket.objects.filter(escalate_to=request.user.id, status=3).all()
         closed = Ticket.objects.filter(form_user=request.user.id, status=2).all()
+
+    from_date, to_date = request.GET.get('from_date'), request.GET.get('to_date')
+    if from_date and to_date:
+        submitted = Ticket.objects.filter(
+            form_user=request.user.id, status=3, date_created__range=[
+                from_date,
+                to_date
+            ]).all()
+        pending = Ticket.objects.filter(
+            escalate_to=request.user.id, status=1, date_created__range=[
+                from_date,
+                to_date
+            ]).all()
+        closed = Ticket.objects.filter(
+            escalate_to=request.user.id, status=2, date_created__range=[
+                from_date,
+                to_date
+            ]).all()
+
     counts = {
         'submitted': len(submitted),
         'pending': len(pending),
         'closed': len(closed)
     }
-    return render(request, 'accounts/profile.html', {'counts': counts})
+    return render(request, 'accounts/profile.html',
+                  {'counts': counts, 'from_date': from_date, 'to_date': to_date})
 
 
 def signup(request):

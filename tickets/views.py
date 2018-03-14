@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tickets.forms import NewTicketForm, EditTicketForm
+from tickets.forms import NewTicketForm, EditTicketForm, ImportExcelForm
 from django.contrib import messages
 from tickets.models import Ticket
 from accounts.models import MyUser
@@ -97,3 +97,19 @@ def delete_ticket(request):
         item = Ticket.objects.get(pk=item_id)
         item.delete()
         return redirect('/tickets/list/')
+
+
+@login_required
+def import_excel(request):
+    if request.method == 'POST':
+        form = ImportExcelForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            request.FILES['file'].save_to_database(
+                model=Ticket,
+                initializer=None,
+                mapdict=None
+            )
+    else:
+        form = ImportExcelForm()
+    return render(request, 'tickets/import.html', {'form': form})

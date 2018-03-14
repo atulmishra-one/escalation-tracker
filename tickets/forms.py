@@ -1,5 +1,6 @@
 from django.forms.models import ModelForm
 from tickets.models import Ticket
+from django import forms
 
 
 class NewTicketForm(ModelForm):
@@ -27,3 +28,6 @@ class EditTicketForm(ModelForm):
             ticket.save()
         return ticket
 
+
+class ImportExcelForm(forms.Form):
+    file = forms.FileField()

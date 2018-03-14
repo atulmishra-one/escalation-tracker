@@ -14,21 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from accounts import views
 from django.conf.urls.static import static
 from django.conf import settings
-from tickets.views import new_ticket, ticket_list, edit_ticket, delete_ticket
+from tickets.views import new_ticket, ticket_list, edit_ticket, delete_ticket, import_excel
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
-    path('logout/', auth_views.logout, {'next_page': '/'}, name='logout'),
-    path('accounts/profile/', views.profile),
-    path('signup/', views.signup),
-    path('tickets/new/', new_ticket),
-    path('tickets/list/', ticket_list),
-    path('tickets/edit/<int:id>/', edit_ticket),
-    path('tickets/delete/', delete_ticket),
+    url(r'^admin/', admin.site.urls),
+    url(r'^$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
+    url(r'^logout/', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^accounts/profile/$', views.profile, name='profile'),
+    url(r'^signup/$', views.signup),
+    url(r'^tickets/new/$', new_ticket),
+    url(r'^tickets/list/$', ticket_list),
+    url(r'^tickets/edit/(?P<id>[0-9]+)/$', edit_ticket),
+    url(r'^tickets/delete/$', delete_ticket),
+    url(r'^tickets/import/$', import_excel)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

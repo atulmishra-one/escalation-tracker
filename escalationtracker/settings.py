@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'tickets',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -140,3 +140,6 @@ EMAIL_HOST_USER = 'atulmishra.one@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 
 EMAIL_PORT = 465
+
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")

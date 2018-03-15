@@ -59,11 +59,11 @@
                     <!--</button>-->
 
                     <a class="btn" href='javaScript: window.open("http://127.0.0.1:8000/tickets/new/", "MsgWindow", "width=600,height=500");' title="Add new Item">
-                        <span data-feather="plus"></span>
+                        <small data-feather="plus"></small>
                     </a>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped" style="font-size:90%;">
+                <table class="table table-striped" style="font-size:70%;">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -106,7 +106,6 @@
                             <td>{{ticket.billed_amount}}</td>
                             <td>{{ticket.balance_amount}}</td>
                             <td>{{ticket.status}}</td>
-
                             <td>{{ticket.action}}</td>
                             <td>{{ticket.escalate_to}}</td>
                             <td>

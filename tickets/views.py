@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tickets.forms import NewTicketForm, EditTicketForm, ImportExcelForm
+from tickets.forms import NewTicketForm, EditTicketForm, ImportExcelForm, UserNewTicketForm
 from django.contrib import messages
 from tickets.models import Ticket
 from accounts.models import MyUser
@@ -16,7 +16,10 @@ from bulk_update.helper import bulk_update
 def new_ticket(request):
 
     if request.method == 'POST':
-        form = NewTicketForm(request.POST)
+        if request.user.is_manager:
+            form = NewTicketForm(request.POST)
+        else:
+            form = UserNewTicketForm(request.POST)
         if form.is_valid():
             user = MyUser.objects.get(pk=request.user.id)
             saved_ticket = form.save(user_id=user)
@@ -35,7 +38,10 @@ def new_ticket(request):
             return redirect('/tickets/list/')
 
     else:
-        form = NewTicketForm()
+        if request.user.is_manager:
+            form = NewTicketForm()
+        else:
+            form = UserNewTicketForm()
     return render(request, 'tickets/new.html', {'form': form})
 
 
@@ -65,7 +71,7 @@ def ticket_list(request):
     #         form_user=request.user.id).all()
     # elif request.user.is_manager:
         # Q(form_user=request.user.id) | Q(escalate_to=request.user.id
-    tickets = Ticket.objects.filter(Q(form_user=request.user.id) | Q(escalate_to=request.user.id)).all()
+    tickets = Ticket.objects.filter(Q(form_user=request.user.id) | Q(escalate_to=request.user.email)).all()
 
     status_display = 'ALL'
     if request.GET.get('filter'):
@@ -75,16 +81,16 @@ def ticket_list(request):
         _, status = statuses[int(filters) - 1]
         if request.user.is_manager:
             if request.GET['filter'] == '1':
-                tickets = Ticket.objects.filter(statuses=3, escalate_to=request.user.id).all()
+                tickets = Ticket.objects.filter(statuses=3, escalate_to=request.user.email).all()
                 status = 'Pending'
         else:
             tickets = Ticket.objects.filter(statuses=request.GET['filter'], form_user=request.user.id).all()
             if request.GET['filter'] == '1':
-                tickets = Ticket.objects.filter(statuses=1, escalate_to=request.user.id).all()
+                tickets = Ticket.objects.filter(statuses=1, escalate_to=request.user.email).all()
                 status = 'Pending'
 
             if request.GET['filter'] == '2':
-                tickets = Ticket.objects.filter(statuses=2, escalate_to=request.user.id).all()
+                tickets = Ticket.objects.filter(statuses=2, escalate_to=request.user.email).all()
 
         status_display = status
 
@@ -131,18 +137,21 @@ def import_excel(request):
             )
             count = len(file_handle.get_records())
             tickets = Ticket.objects.order_by('-id').all()[:count]
+            escalate_to = []
             for ticket in tickets:
                 ticket.form_user = request.user
-                escalate_to = ticket.escalate_to
+                escalate_to.append(ticket.escalate_to)
+            bulk_update(tickets)
+
+            for escalate in escalate_to:
                 send_mail(
                     'Escalation Mail',
                     'A new ticket has been escalated to you. from {}'.format(
                         request.user
                     ),
                     request.user.email,
-                    [str(escalate_to)]
+                    [str(escalate)]
                 )
-            bulk_update(tickets)
 
     else:
         form = ImportExcelForm()

@@ -108,7 +108,24 @@ def import_excel(request):
             request.FILES['file'].save_to_database(
                 model=Ticket,
                 initializer=None,
-                mapdict=None
+                mapdict={
+                    'DATE': 'date_created',
+                    'CLINIC': 'clinic',
+                    'AGING/BATCH': 'aging_batch',
+                    'ACCOUNT': 'account',
+                    'PAT NAME': 'patient_name',
+                    'INSURANCE NAME': 'insurance',
+                    'DOS': 'dos',
+                    'CPT CODES': 'cpt_codes',
+                    'BILLED AMOUNT': 'billed_amount',
+                    'BALANCE AMOUNT': 'balance_amount',
+                    'STATUS': 'status',
+                    'NOTES': 'comment',
+                    'ACTION': 'action',
+                    'User Name': 'escalate_to',
+                    'PREVENTIVE ACTION': 'preventive_action',
+                    'Worked': 'worked'
+                }
             )
     else:
         form = ImportExcelForm()

@@ -63,17 +63,24 @@
                     </a>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped" style="font-size:90%">
+                <table class="table table-striped" style="font-size:90%;">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Patient Name</th>
-                        <th>Insurance</th>
-                        <th>Issue</th>
-                        <th>Comment</th>
-                        <th>Escalate to</th>
+                        <th>DATE</th>
+                        <th>CLINIC</th>
+                        <th>AGING/BATCH</th>
+                        <th>ACCOUNT</th>
+                        <th>PAT NAME</th>
+                        <th>INSURANCE NAME</th>
+                        <th>DOS</th>
+                        <th>CPT CODES</th>
+                        <th>BILLED AMOUNT</th>
+                        <th>BALANCE AMOUNT</th>
+                        <th>STATUS</th>
+                        <th>NOTES</th>
+                        <th>ACTION</th>
+                        <th>Escalate To</th>
                         <th>View</th>
                     </tr>
                     </thead>
@@ -89,11 +96,18 @@
                                 <input type="checkbox" name="id" value="{{ticket.id}}">
                             </td>
                             <td>{{ticket.date_created}}</td>
-                            <td>{{ticket.name}}</td>
+                            <td>{{ticket.clinic}}</td>
+                            <td>{{ticket.aging_batch}}</td>
+                            <td>{{ticket.account}}</td>
                             <td>{{ticket.patient_name}}</td>
                             <td>{{ticket.insurance}}</td>
-                            <td>{{ticket.issue}}</td>
+                            <td>{{ticket.dos}}</td>
+                            <td>{{ticket.cpt_codes}}</td>
+                            <td>{{ticket.billed_amount}}</td>
+                            <td>{{ticket.balance_amount}}</td>
+                            <td>{{ticket.status}}</td>
                             <td>{{ticket.comment}}</td>
+                            <td>{{ticket.action}}</td>
                             <td>{{ticket.escalate_to}}</td>
                             <td>
                                 <a href='javaScript: var new_window = window.open("http://127.0.0.1:8000/tickets/edit/{{ticket.id}}/", "MsgWindow", "width=600,height=500");'>

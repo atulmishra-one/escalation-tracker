@@ -8,28 +8,28 @@ from tickets.models import Ticket
 
 def profile(request):
 
-    submitted = Ticket.objects.filter(form_user=request.user.id, status=3).all()
-    pending = Ticket.objects.filter(escalate_to=request.user.id, status=1).all()
-    closed = Ticket.objects.filter(escalate_to=request.user.id, status=2).all()
+    submitted = Ticket.objects.filter(form_user=request.user.id, statuses=3).all()
+    pending = Ticket.objects.filter(escalate_to=request.user.id, statuses=1).all()
+    closed = Ticket.objects.filter(escalate_to=request.user.id, statuses=2).all()
 
     if request.user.is_manager:
-        pending = Ticket.objects.filter(escalate_to=request.user.id, status=3).all()
-        closed = Ticket.objects.filter(form_user=request.user.id, status=2).all()
+        pending = Ticket.objects.filter(escalate_to=request.user.id, statuses=3).all()
+        closed = Ticket.objects.filter(form_user=request.user.id, statuses=2).all()
 
     from_date, to_date = request.GET.get('from_date'), request.GET.get('to_date')
     if from_date and to_date:
         submitted = Ticket.objects.filter(
-            form_user=request.user.id, status=3, date_created__range=[
+            form_user=request.user.id, statuses=3, date_created__range=[
                 from_date,
                 to_date
             ]).all()
         pending = Ticket.objects.filter(
-            escalate_to=request.user.id, status=1, date_created__range=[
+            escalate_to=request.user.id, statuses=1, date_created__range=[
                 from_date,
                 to_date
             ]).all()
         closed = Ticket.objects.filter(
-            escalate_to=request.user.id, status=2, date_created__range=[
+            escalate_to=request.user.id, statuses=2, date_created__range=[
                 from_date,
                 to_date
             ]).all()

@@ -7,6 +7,7 @@ from accounts.models import MyUser
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Q
+from bulk_update.helper import bulk_update
 
 # Create your views here.
 
@@ -68,22 +69,22 @@ def ticket_list(request):
 
     status_display = 'ALL'
     if request.GET.get('filter'):
-        tickets = Ticket.objects.filter(status=request.GET['filter'], form_user=request.user.id).all()
+        tickets = Ticket.objects.filter(statuses=request.GET['filter'], form_user=request.user.id).all()
 
         filters = request.GET['filter']
         _, status = statuses[int(filters) - 1]
         if request.user.is_manager:
             if request.GET['filter'] == '1':
-                tickets = Ticket.objects.filter(status=3, escalate_to=request.user.id).all()
+                tickets = Ticket.objects.filter(statuses=3, escalate_to=request.user.id).all()
                 status = 'Pending'
         else:
-            tickets = Ticket.objects.filter(status=request.GET['filter'], form_user=request.user.id).all()
+            tickets = Ticket.objects.filter(statuses=request.GET['filter'], form_user=request.user.id).all()
             if request.GET['filter'] == '1':
-                tickets = Ticket.objects.filter(status=1, escalate_to=request.user.id).all()
+                tickets = Ticket.objects.filter(statuses=1, escalate_to=request.user.id).all()
                 status = 'Pending'
 
             if request.GET['filter'] == '2':
-                tickets = Ticket.objects.filter(status=2, escalate_to=request.user.id).all()
+                tickets = Ticket.objects.filter(statuses=2, escalate_to=request.user.id).all()
 
         status_display = status
 
@@ -105,7 +106,8 @@ def import_excel(request):
         form = ImportExcelForm(request.POST, request.FILES)
 
         if form.is_valid():
-            request.FILES['file'].save_to_database(
+            file_handle = request.FILES['file']
+            file_handle.save_to_database(
                 model=Ticket,
                 initializer=None,
                 mapdict={
@@ -127,6 +129,21 @@ def import_excel(request):
                     'Worked': 'worked'
                 }
             )
+            count = len(file_handle.get_records())
+            tickets = Ticket.objects.order_by('-id').all()[:count]
+            for ticket in tickets:
+                ticket.form_user = request.user
+                escalate_to = ticket.escalate_to
+                send_mail(
+                    'Escalation Mail',
+                    'A new ticket has been escalated to you. from {}'.format(
+                        request.user
+                    ),
+                    request.user.email,
+                    [str(escalate_to)]
+                )
+            bulk_update(tickets)
+
     else:
         form = ImportExcelForm()
     return render(request, 'tickets/import.html', {'form': form})

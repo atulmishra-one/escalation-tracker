@@ -58,7 +58,7 @@ def edit_ticket(request, id):
             return redirect('/tickets/list/')
 
     else:
-        form = EditTicketForm(instance=obj)
+        form = EditTicketForm(instance=obj, initial={'escalate_to': obj.form_user})
     return render(request, 'tickets/edit.html', {'form': form})
 
 

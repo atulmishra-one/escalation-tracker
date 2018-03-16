@@ -39,7 +39,7 @@ class UserNewTicketForm(ModelForm):
         exclude = ('escalated', 'form_user', 'preventive_action')
 
     def save(self, user_id, commit=True):
-        ticket = super(NewTicketForm, self).save(commit=False)
+        ticket = super(UserNewTicketForm, self).save(commit=False)
         ticket.form_user = user_id
         if commit:
             ticket.save()

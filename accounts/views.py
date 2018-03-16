@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import UserCreateForm
 from tickets.models import Ticket
+from django.db.models import Q
 
 # Create your views here.
 
@@ -10,7 +11,7 @@ def profile(request):
 
     submitted = Ticket.objects.filter(form_user=request.user.id, statuses=3).all()
     pending = Ticket.objects.filter(escalate_to=request.user.email, statuses=1).all()
-    closed = Ticket.objects.filter(escalate_to=request.user.email, statuses=2).all()
+    closed = Ticket.objects.filter(Q(escalate_to=request.user.email) | Q(form_user=request.user.id), statuses=2).all()
 
     if request.user.is_manager:
         pending = Ticket.objects.filter(escalate_to=request.user.email, statuses=3).all()
